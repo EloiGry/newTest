@@ -14,7 +14,17 @@ export default function Home() {
 
 
 const handleChange = (letter) => {
-  setText([...text, letter])
+  // setText([...text, letter])
+  switch(letter) {
+    case 'backspace':
+       setText(text.splice(0, text.length-1))
+       break;
+    case 'space' :
+      setText([...text, ""])
+      break;
+    default:
+      setText([...text, letter])
+  }
 }
   console.log(text);
   return (
