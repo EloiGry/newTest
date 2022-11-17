@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 
   const keyLayout = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "0", "&#8676;"];
   let keyLayout1 = ["q", "w", "e", "r", "t", "y", "u", "i", "o", "p"]
@@ -123,9 +123,9 @@ const handleKeyDown = (e) => {
 }
 
 const useOutsideClick = (callback) => {
-  const ref = React.useRef();
+  const ref = useRef();
 
-  React.useEffect(() => {
+  useEffect(() => {
     const handleClick = (event) => {
       if (ref.current && !ref.current.contains(event.target)) {
         callback();
