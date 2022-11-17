@@ -14,16 +14,17 @@ export default function Home() {
 
 
 const handleChange = (letter) => {
-  setText([...text, letter])}
-
+  setText([...text, letter])
+}
+  console.log(text);
   return (
     <div>
-      <textarea onFocus={() => setKeyBoard(true)} className="border-2 border-black" value={text}></textarea>
+      <textarea onFocus={() => setKeyBoard(true)} className="border-2 border-black" value={text.join('')}></textarea>
       {keyBoard && 
-        <div className="bg-[rgb(1,65,52, 0.9)] w-full min-h-1/2 fixed bottom-0 text-white flex flex-wrap">
+        <div className="bg-green-800 w-full min-h-1/2 fixed bottom-0 text-white flex flex-wrap">
         {keyLayout.map((letter,index) => {
           return (
-            <button key={index} onClick={() => {handleChange(letter)}} className="px-4 py-2 m-1 cursor-pointer opacity-800">
+            <button key={index} onClick={() => {handleChange(letter)}} className="px-4 py-2 m-1 cursor-pointer">
               {letter}
             </button>
           )
