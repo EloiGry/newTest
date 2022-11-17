@@ -1,14 +1,20 @@
-import { useState } from "react"
+import React, { useState } from "react";
+
+  const keyLayout = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "0", "<-"];
+  let keyLayout1 = ["q", "w", "e", "r", "t", "y", "u", "i", "o", "p"]
+  let keyLayout2 = ["^", "a", "s", "d", "f", "g", "h", "j", "k", "l", "enter"]
+  let keyLayout3 = ["lock", "z", "x", "c", "v", "b", "n", "m", ",", ".", "?"]
+  const keyLayout4 = ["]"]
+
 
 
 export default function Home() {
   const [keyBoard, setKeyBoard] = useState(false)
   const [text, setText] = useState([])
-  const keyLayout = [
-    "1", "2", "3", "4", "5", "6", "7", "8", "9", "0", "<-",
-    "q", "w", "e", "r", "t", "y", "u", "i", "o", "p", "a", "s", "d", "f", "g", "h", "j", "k", "l", "enter", "z", "x", "c", "v", "b", "n", "m", ",", ".", "?",
-    "space"
-];
+  const [uppercase, setUppercase] = useState(false)
+  const ref = useOutsideClick(() => setKeyBoard(false));
+
+  
 
 
 const handleChange = (letter) => {
@@ -16,23 +22,89 @@ const handleChange = (letter) => {
     case '<-':
        setText(text.splice(0, text.length-1))
        break;
-    case 'space' :
+    case ']' :
       setText([...text, " "])
       break;
+      case '^' :
+        if (!uppercase) {
+          const newKey1 = keyLayout1.map(e => e.toUpperCase()) 
+          keyLayout1 = newKey1
+          const newKey2 = keyLayout2.map(e => e.toUpperCase()) 
+          keyLayout2 = newKey2
+          const newKey3 = keyLayout3.map(e => e.toUpperCase()) 
+          keyLayout3 = newKey3
+          setUppercase(true)
+        }
+        else {
+          const newKey1 = keyLayout1.map(e => e.toLowerCase())
+          keyLayout1 = newKey1
+          const newKey2 = keyLayout2.map(e => e.toLowerCase()) 
+          keyLayout2 = newKey2
+          const newKey3 = keyLayout3.map(e => e.toLowerCase()) 
+          keyLayout3 = newKey3
+          setUppercase(false)
+        }
+        break;
     default:
       setText([...text, letter])
   }
 }
-  console.log(text);
+
+const handleTarget = (e) => {
+    const split = e.target.value.split("")
+    setText([...text, split[split.length-1]])
+}
+
+const handleKeyDown = (e) => {
+  if (e.key === 'Backspace') {
+    e.preventDefault()
+    const newText = text.splice(0, text.length-1)
+    setText(newText)
+}
+}
+
+
   return (
-    <div>
-      <textarea onFocus={() => setKeyBoard(true)} className="border-2 border-black" value={text.join('')}></textarea>
+    <div ref={ref}>
+      <textarea onFocus={() => setKeyBoard(true)} onChange={(e)=> handleTarget(e)} onKeyDown={(e)=>handleKeyDown(e)} className="border-2 border-black" value={text.join('')}></textarea>
       {keyBoard && 
-        <div className="bg-[#004134] w-full min-h-1/2 fixed bottom-0 text-white flex flex-wrap">
+        <div className="bg-[#004134] fixed bottom-0 top-50 w-full text-white flex flex-wrap items-center justify-center">
+
         {keyLayout.map((letter,index) => {
           return (
-            <button key={index} onClick={() => {handleChange(letter)}} className="w-1/12 px-4 py-2 m-1 cursor-pointer bg-[#3B675D]">
+            <button  key={index} onClick={() => {handleChange(letter)}} className="rounded w-1/12 px-4 py-2 m-1 cursor-pointer bg-[#3B675D] hover:bg-opacity-40">
               {letter}
+            </button>
+          )
+        })}
+
+        <div className="mx-2 w-full flex justify-center"> 
+        {keyLayout1.map((letter,index) => {
+          return (
+            <button  key={index} onClick={() => {handleChange(letter)}} className="rounded w-1/12 px-4 py-2 m-1 cursor-pointer bg-[#3B675D] hover:bg-opacity-40">
+              {letter}
+            </button>
+          )
+        })}
+        </div>
+        {keyLayout2.map((letter,index) => {
+          return (
+            <button  key={index} onClick={() => {handleChange(letter)}} className="rounded w-1/12 px-4 py-2 m-1 cursor-pointer bg-[#3B675D] hover:bg-opacity-40">
+              {letter}
+            </button>
+          )
+        })}
+        {keyLayout3.map((letter,index) => {
+          return (
+            <button  key={index} onClick={() => {handleChange(letter)}} className="rounded w-1/12 px-4 py-2 m-1 cursor-pointer bg-[#3B675D] hover:bg-opacity-40">
+              {letter}
+            </button>
+          )
+        })}
+        {keyLayout4.map((letter,index) => {
+          return (
+            <button  key={index} onClick={() => {handleChange(letter)}} className=" rounded w-2/3 px-4 py-2 m-1 cursor-pointer bg-[#3B675D] hover:bg-opacity-40">
+              <div className="transform rotate-90 text-3xl">{letter}</div>
             </button>
           )
         })}
@@ -42,3 +114,22 @@ const handleChange = (letter) => {
   )
 }
 
+const useOutsideClick = (callback) => {
+  const ref = React.useRef();
+
+  React.useEffect(() => {
+    const handleClick = (event) => {
+      if (ref.current && !ref.current.contains(event.target)) {
+        callback();
+      }
+    };
+
+    document.addEventListener('click', handleClick);
+
+    return () => {
+      document.removeEventListener('click', handleClick);
+    };
+  }, []);
+
+  return ref;
+};
