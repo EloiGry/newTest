@@ -14,7 +14,7 @@ export default function Home() {
 
 
 const handleChange = (letter) => {
-  setText([...text, letter])
+  setText([...text, letter])}
 
   return (
     <div>
@@ -33,4 +33,4 @@ const handleChange = (letter) => {
     </div>
   )
 }
-}
+
